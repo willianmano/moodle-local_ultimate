@@ -1,0 +1,77 @@
+<div class="ultimate-profile">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body border border-radius">
+                    <div class="userpicture" data-action="choose-avatar-modal">
+                        <img id="ultimate-user-avatar" src="{{{useravatar}}}" alt="{{{userfirstname}}}">
+                    </div>
+
+                    <h2 class="text-center">{{firstname}}</h2>
+
+                    {{#itsme}}
+                        <div class="actions text-center">
+                            <button type="button" class="btn btn-primary btn-sm mt-1" data-action="choose-avatar-modal">
+                                <i class="fa fa-user-circle-o"></i> {{#str}}updateavatar, local_ultimate{{/str}}
+                            </button>
+
+                            <a type="button" class="btn btn-secondary btn-sm mt-1" href="{{config.wwwroot}}/user/edit.php?id={{id}}&returnto=profile">
+                            <i class="fa fa-pencil-square-o"></i> {{#str}}editprofile, local_ultimate{{/str}}
+                            </a>
+                        </div>
+                    {{/itsme}}
+
+                    <h3 class="mt-3">{{#str}}aboutme, local_ultimate{{/str}}</h3>
+
+                    <p class="text-muted mb-2">
+                        <strong>{{#str}}fullname, local_ultimate{{/str}}</strong> <span class="ms-2">{{firstname}} {{lastname}}</span>
+                    </p>
+                    <p class="text-muted mb-2">
+                        <strong>{{#str}}email, local_ultimate{{/str}}</strong> <span class="ms-2">{{email}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            {{#hascourses}}
+                <div class="card card-body border">
+                    <h4 class="mb-3">{{#str}}mycourses, local_ultimate{{/str}}</h4>
+                    <div class="tab-pane fade show active" id="cursos" role="tabpanel" aria-labelledby="courses-tab">
+                        {{#courses}}
+                            <div id="course-{{ id }}" class="card mb-3 shadow-sm border">
+                                <div class="card-body row">
+                                    <div class="col-md-3 col-sm-6 courseimage">
+                                        <img src="{{{image}}}" alt="{{fullname}}" class="img-responsive">
+                                    </div>
+
+                                    <div class="media-body col-md-9 col-sm-6">
+                                        <a href="{{ link }}"><h5 class="mt-0">{{{ fullname }}}</h5></a>
+                                        {{#startdate}}<p><strong>{{#str}}startedon, local_ultimate{{/str}}:</strong> {{#userdate}} {{startdate}}, %A, %d %B %Y {{/userdate}}</p>{{/startdate}}
+
+                                        {{#completionenabled}}
+                                            <p class="mb-0">{{#str}}courseprogress, local_ultimate{{/str}}</p>
+
+                                            <div class="progress mb-3">
+                                              <div class="progress-bar" role="progressbar" style="width: {{progress}}%;" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
+                                            </div>
+                                        {{/completionenabled}}
+
+                                        <a class="btn btn-sm btn-primary" href="{{link}}">{{#str}}accesscourse, local_ultimate{{/str}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/ courses }}
+                    </div>
+                </div>
+            {{/hascourses}}
+        </div>
+    </div>
+</div>
+
+{{#itsme}}
+    {{#js}}
+        require(['local_ultimate/chooseavatar'], function(ChooseAvatar) {
+            ChooseAvatar.init('[data-action=choose-avatar-modal]', {{{contextid}}});
+        });
+    {{/js}}
+{{/itsme}}

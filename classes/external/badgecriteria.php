@@ -1,0 +1,169 @@
+<?php
+
+namespace local_ultimate\external;
+
+use core\context;
+use core_external\external_api;
+use core_external\external_value;
+use core_external\external_single_structure;
+use core_external\external_function_parameters;
+use local_ultimate\forms\badgecriteria as badgecriteriaform;
+
+/**
+ * Badge criteria external api class.
+ *
+ * @package     local_ultimate
+ * @copyright   2022 Willian Mano {@link https://conecti.me}
+ * @author      Willian Mano <willianmanoaraujo@gmail.com>
+ */
+class badgecriteria extends external_api {
+    /**
+     * Create badge parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function create_parameters() {
+        return new external_function_parameters([
+            'contextid' => new external_value(PARAM_INT, 'The context id for the course module'),
+            'courseid' => new external_value(PARAM_INT, 'The course id'),
+            'jsonformdata' => new external_value(PARAM_RAW, 'The data from the badge form, encoded as a json array')
+        ]);
+    }
+
+    /**
+     * Create badge method
+     *
+     * @param int $contextid
+     * @param int $course
+     * @param string $jsonformdata
+     *
+     * @return array
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \moodle_exception
+     */
+    public static function create($contextid, $courseid, $jsonformdata) {
+        global $DB;
+
+        // We always must pass webservice params through validate_parameters.
+        $params = self::validate_parameters(self::create_parameters(),
+            ['contextid' => $contextid, 'courseid' => $courseid, 'jsonformdata' => $jsonformdata]);
+
+        $context = context::instance_by_id($params['contextid'], MUST_EXIST);
+
+        // We always must call validate_context in a webservice.
+        self::validate_context($context);
+
+        $serialiseddata = json_decode($params['jsonformdata']);
+
+        $data = [];
+        parse_str($serialiseddata, $data);
+
+        $mform = new badgecriteriaform($data, $data);
+
+        $validateddata = $mform->get_data();
+
+        if (!$validateddata) {
+            throw new \moodle_exception('invalidformdata');
+        }
+
+        $now = time();
+
+        $badgecriteria = new \stdClass();
+        $badgecriteria->courseid = $courseid;
+        $badgecriteria->badgeid = $validateddata->badgeid;
+        $badgecriteria->method = $validateddata->method;
+        $badgecriteria->value = $validateddata->value;
+        $badgecriteria->timecreated = $now;
+        $badgecriteria->timemodified = $now;
+
+        if ($validateddata->skilltarget && $validateddata->method == 'skillpoints') {
+            $badgecriteria->target = $validateddata->skilltarget;
+        }
+
+        if (!empty($validateddata->skilltargetaggregation) && $validateddata->method == 'skillpointsaggregation') {
+            $badgecriteria->target = implode(',', $validateddata->skilltargetaggregation);
+        }
+
+        $badgecriteriaid = $DB->insert_record('ultimate_badges_criterias', $badgecriteria);
+
+        $badgecriteria->id = $badgecriteriaid;
+
+        return [
+            'status' => 'ok',
+            'message' => get_string('createbadgecriteria_success', 'local_ultimate'),
+            'data' => json_encode($badgecriteria)
+        ];
+    }
+
+    /**
+     * Create badge return fields
+     *
+     * @return external_single_structure
+     */
+    public static function create_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_TEXT, 'Operation status'),
+                'message' => new external_value(PARAM_RAW, 'Return message'),
+                'data' => new external_value(PARAM_RAW, 'Return data')
+            )
+        );
+    }
+
+    /**
+     * Delete badge parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_parameters() {
+        return new external_function_parameters([
+            'badgecriteria' => new external_single_structure([
+                'id' => new external_value(PARAM_INT, 'The badge id', VALUE_REQUIRED)
+            ])
+        ]);
+    }
+
+    /**
+     * Delete badge method
+     *
+     * @param array $badge
+     *
+     * @return array
+     *
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \invalid_parameter_exception
+     * @throws \moodle_exception
+     */
+    public static function delete($badgecriteria) {
+        global $DB;
+
+        self::validate_parameters(self::delete_parameters(), ['badgecriteria' => $badgecriteria]);
+
+        $badgecriteria = (object)$badgecriteria;
+
+        $DB->delete_records('ultimate_badges_criterias', ['id' => $badgecriteria->id]);
+
+        return [
+            'status' => 'ok',
+            'message' => get_string('deletebadgecriteria_success', 'local_ultimate')
+        ];
+    }
+
+    /**
+     * Delete badge return fields
+     *
+     * @return external_single_structure
+     */
+    public static function delete_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_TEXT, 'Operation status'),
+                'message' => new external_value(PARAM_TEXT, 'Return message')
+            )
+        );
+    }
+}

@@ -1,0 +1,18 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">{{#str}}table_position, local_ultimate{{/str}}</th>
+        <th scope="col">{{#str}}table_name, local_ultimate{{/str}}</th>
+        <th scope="col">{{#str}}table_points, local_ultimate{{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#leaderboard_month}}
+        <tr class="{{{class}}}">
+            <th scope="row">{{{position}}}</th>
+            <td>{{{userpic}}} {{firstname}}</td>
+            <td>{{coins}}</td>
+        </tr>
+    {{/leaderboard_month}}
+    </tbody>
+</table>

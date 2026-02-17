@@ -1,0 +1,282 @@
+.gameblock .coinicon {
+    width: 75px;
+    height: 75px;
+}
+
+.gameblock .coins h3 {
+    font-size: 48px;
+    font-weight: 600;
+}
+
+.gameblock .userpicture,
+.gamechanger-profile .userpicture {
+    text-align: center;
+}
+
+.gameblock .userpicture {
+    position: relative;
+}
+
+.gameblock .userpicture .level {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--bs-success);
+    color: #fff;
+    padding: 0 .25rem;
+    border-radius: .5rem;
+    border: 2px solid #fff;
+    font-size: 0.85em;
+}
+}
+
+.gameblock .profile {
+    border-radius: 1rem;
+}
+
+.gameblock thead.table-dark tr th {
+    background-color: #ffb000;
+}
+
+.gameblock .table {
+    border-top: none;
+}
+
+.gameblock thead.table-dark tr th:first-of-type {
+    border-top-left-radius: .5rem;
+}
+
+.gameblock thead.table-dark tr th:last-of-type {
+    border-top-right-radius: .5rem;
+}
+
+.gameblock .userpicture img,
+.gamechanger-profile .userpicture img {
+    width: 72px;
+    height: 72px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 4px solid var(--bs-success);
+}
+
+.gameblock .userinfo .pointicon {
+    width: 24px;
+    height: 24px;
+    background-color: var(--bs-success);
+    color: #fff;
+    border-radius: 50%;
+}
+
+.gameblock .progress {
+    height: .5rem;
+}
+
+.chooseavatar-form {
+    text-align: center;
+}
+
+.chooseavatar-form .avatar {
+    border: 1px solid #c3c3c3;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    cursor: pointer;
+}
+
+.chooseavatar-form .avatar:hover {
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.5));
+}
+
+.ultimatebadges .badge img.dimmed {
+    filter: grayscale(100%) opacity(30%);
+}
+
+.gameblock h3,
+.marketblock .header h3 {
+    text-transform: uppercase;
+    font-size: .8rem;
+}
+
+/* Absolute Center Spinner */
+#gamechanger-fullscreenloading {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/* Transparent Overlay */
+#gamechanger-fullscreenloading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .8));
+
+    background: -webkit-radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .8));
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+#gamechanger-fullscreenloading:not(:required) {
+    /* hide "loading..." text */
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+
+#gamechanger-fullscreenloading:not(:required):after {
+    content: '';
+    display: block;
+    font-size: 10px;
+    width: 1em;
+    height: 1em;
+    margin-top: -0.5em;
+    -webkit-animation: spinner 1500ms infinite linear;
+    -moz-animation: spinner 1500ms infinite linear;
+    -ms-animation: spinner 1500ms infinite linear;
+    -o-animation: spinner 1500ms infinite linear;
+    animation: spinner 1500ms infinite linear;
+    border-radius: 0.5em;
+    -webkit-box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+    box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-moz-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-o-keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.gameblock .xp p {
+    font-weight: 500;
+    font-size: .875em;
+}
+
+.gameblock .leaderboard .tabscontainer {
+    background: #fff;
+    border-radius: var(--bs-border-radius);
+}
+
+.gameblock .leaderboard .nav-pills {
+    background-color: #fff;
+    border-radius: var(--bs-border-radius);
+}
+
+.gameblock .leaderboard .nav-pills .nav-link {
+    padding: .25rem;
+}
+
+.gameblock .leaderboard .tab-pane {
+    padding: 0;
+}
+
+.gameblock .leaderboard .tab-content li {
+    margin-bottom: .5rem;
+    background-color: #fff;
+}
+
+.gameblock .leaderboard .tab-content li:last-child {
+    margin-bottom: 0;
+}
+
+.gameblock .leaderboard .tab-content li .avatar img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.gameblock .leaderboard .tab-content li .pos .number {
+    width: 20px;
+    height: 20px;
+    background-color: var(--bs-success);
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.gameblock .leaderboard .tab-content li:first-child .pos .number {
+    background-color: #fbbf23;
+}
+
+.gameblock .leaderboard .tab-content li:nth-child(2) .pos .number {
+    background-color: #94a3b8;
+}
+
+.gameblock .leaderboard .tab-content li:nth-child(3) .pos .number {
+    background-color: #b4530a;
+}

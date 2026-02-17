@@ -1,0 +1,107 @@
+<div class="gameblock">
+
+    <div class="d-flex mb-2">
+        <div class="userpicture" data-action="choose-avatar-modal">
+            <img id="ultimate-user-avatar" src="{{{avatar}}}" alt="{{{firstname}}}">
+
+            {{#showxp}}
+                <div class="level">{{#str}}lvl, local_ultimate{{/str}} {{level}}</div>
+            {{/showxp}}
+        </div>
+
+        <div class="userinfo d-flex justify-content-center flex-column ml-2 w-100">
+            <div class="d-flex justify-content-between">
+                <h3>{{firstname}}</h3>
+
+                <a class="text-success-emphasis" href="{{config.wwwroot}}/local/ultimate/profile.php?course={{course}}"><i class="fa fa-id-badge"></i></a>
+            </div>
+            <div class="points">
+                <div class="d-flex">
+                    <div class="pointicon d-flex align-items-center justify-content-center">
+                        <i class="fa fa-medal"></i>
+                    </div>
+                    <div class="ml-1"><strong>{{points}} {{#str}}points, local_ultimate{{/str}}</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#showxp}}
+        <div class="xp mb-3">
+            <div class="d-flex justify-content-between">
+                <h3 class="mb-0">{{#str}}xpprogress, local_ultimate{{/str}}</h3>
+                <p class="mb-0">{{points}} / {{nextlevelpoints}}</p>
+            </div>
+
+            <div class="progress" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar bg-success" style="width: {{progress}}%"></div>
+            </div>
+        </div>
+    {{/showxp}}
+
+    {{#showbadges}}
+        <div class="ultimatebadges mb-2">
+            <h3>{{#str}}badges{{/str}}</h3>
+            <div class="container">
+                <div class="row row-cols-3">
+                    {{#badges}}
+                        <div class="badge">
+                            <img class="ultimatebadge img-responsive {{^awarded}}dimmed{{/awarded}}" src="{{{badgeimage}}}" alt="{{{name}}}">
+                        </div>
+                    {{/badges}}
+                </div>
+            </div>
+        </div>
+    {{/showbadges}}
+
+    {{#showleaderboard}}
+        <div class="leaderboard mb-2">
+            <h3>{{#str}}leaderboard, local_ultimate{{/str}}</h3>
+            <div class="tabscontainer p-2">
+                <ul class="nav nav-pills nav-fill" id="leaderboard-tabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active" id="week-tab" data-bs-toggle="tab" data-bs-target="#week" type="button" role="tab" aria-controls="week" aria-selected="true">
+                            {{#str}}week, local_ultimate{{/str}}
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="month-tab" data-bs-toggle="tab" data-bs-target="#month" type="button" role="tab" aria-controls="month">
+                            {{#str}}month, local_ultimate{{/str}}
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general">
+                            {{#str}}general, local_ultimate{{/str}}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane container active" id="week">
+                    {{#leaderboard_week}}
+                        {{> local_ultimate/leaderboard }}
+                    {{/leaderboard_week}}
+                </div>
+                <div class="tab-pane container fade" id="month">
+                    {{#leaderboard_month}}
+                        {{> local_ultimate/leaderboard }}
+                    {{/leaderboard_month}}
+                </div>
+                <div class="tab-pane container fade" id="general">
+                    {{#leaderboard_general}}
+                        {{> local_ultimate/leaderboard }}
+                    {{/leaderboard_general}}
+                </div>
+            </div>
+        </div>
+    {{/showleaderboard}}
+</div>
+
+{{#showavatar}}
+    {{#js}}
+        require(['local_ultimate/chooseavatar'], function(ChooseAvatar) {
+            ChooseAvatar.init('[data-action=choose-avatar-modal]', {{{contextid}}});
+        });
+    {{/js}}
+{{/showavatar}}

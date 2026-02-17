@@ -1,0 +1,12 @@
+<ul class="list-group leaderboard mt-2">
+    {{#data}}
+        <li class="px-3 py-1 d-flex justify-content-center align-items-center border border-radius">
+            <div class="pos"><div class="number">{{position}}</div></div>
+            <div class="avatar ml-2">
+                <img class="img-responsive img-rounded" src="{{userpicture}}" alt="{{firstname}}">
+            </div>
+            <div class="name ml-2">{{firstname}}</div>
+            <div class="coins ml-auto">{{coins}}</div>
+        </li>
+    {{/data}}
+</ul>

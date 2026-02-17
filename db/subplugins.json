@@ -1,0 +1,8 @@
+{
+  "subplugintypes": {
+    "ultimatebadgecriteria": "badgecriteria"
+  },
+  "plugintypes": {
+    "ultimatebadgecriteria": "local/ultimate/badgecriteria"
+  }
+}

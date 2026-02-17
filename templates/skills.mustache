@@ -1,0 +1,35 @@
+<div class="text-right mb-3">
+    <a href="#"
+       class="btn btn-primary" data-action="create-skill-modal">
+        <i class="fa fa-plus-circle"></i> {{#str}}createskill, local_ultimate{{/str}}
+    </a>
+</div>
+
+<table class="table table-bordered table-hover table-ultimate-skills">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">{{#str}}name, local_ultimate{{/str}}</th>
+        <th scope="col" style="width: 120px; text-align: center;">{{#str}}actions, local_ultimate{{/str}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#skills}}
+        <tr>
+            <th scope="row">{{{id}}}</th>
+            <td>{{{name}}}</td>
+            <td style="width: 120px; text-align: center;">
+                <a href="#" data-id="{{id}}" class="btn btn-danger btn-sm delete-ultimate-skill"><i class="fa fa-trash-o"></i></a>
+            </td>
+        </tr>
+    {{/skills}}
+    </tbody>
+</table>
+
+{{#js}}
+    require(['local_ultimate/skill/create', 'local_ultimate/skill/delete'], function(CreateSkill, DeleteSkill) {
+        CreateSkill.init('[data-action=create-skill-modal]', {{{contextid}}}, {{{courseid}}}, {{{skillid}}});
+
+        DeleteSkill.init();
+    });
+{{/js}}
