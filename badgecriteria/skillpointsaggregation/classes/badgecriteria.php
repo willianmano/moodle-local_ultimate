@@ -136,13 +136,13 @@ class badgecriteria extends \local_ultimate\badgecriteria {
             return '<p class="mb-0">'.$pluginname.'
                         <a class="btn btn-link p-0"
                            role="button"
-                           data-container="body"
-                           data-toggle="popover"
-                           data-placement="right"
-                           data-html="true"
+                           data-bs-container="body"
+                           data-bs-toggle="popover"
+                           data-bs-placement="right"
+                           data-bs-html="true"
                            tabindex="0"
-                           data-trigger="focus"
-                           data-content="<div class=\'no-overflow\'><p>'.$criteriaprogresdesc.'</p></div>">
+                           data-bs-trigger="focus"
+                           data-bs-content="<div class=\'no-overflow\'><p>'.$criteriaprogresdesc.'</p></div>">
                             <i class="icon fa fa-info-circle text-info fa-fw " title="'.$pluginname.'" role="img" aria-label="'.$pluginname.'"></i>
                         </a>
                     </p>
@@ -154,13 +154,13 @@ class badgecriteria extends \local_ultimate\badgecriteria {
         $output = '<p class="mb-0">'.$pluginname.'
                         <a class="btn btn-link p-0"
                            role="button"
-                           data-container="body"
-                           data-toggle="popover"
-                           data-placement="right"
-                           data-html="true"
+                           data-bs-container="body"
+                           data-bs-toggle="popover"
+                           data-bs-placement="right"
+                           data-bs-html="true"
                            tabindex="0"
-                           data-trigger="focus"
-                           data-content="<div class=\'no-overflow\'><p>'.$criteriaprogresdesc.'</p></div>">
+                           data-bs-trigger="focus"
+                           data-bs-content="<div class=\'no-overflow\'><p>'.$criteriaprogresdesc.'</p></div>">
                             <i class="icon fa fa-info-circle text-info fa-fw " title="'.$pluginname.'" role="img" aria-label="'.$pluginname.'"></i>
                         </a>
                     </p>';

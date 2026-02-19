@@ -21,7 +21,7 @@ function local_ultimate_coursemodule_standard_elements($formwrapper, $mform) {
     $contextcourse = \core\context\course::instance($formwrapper->get_current()->course);
     $blockutil = new \local_ultimate\util\block();
     if (!$blockutil->context_has_block($contextcourse->id)) {
-        return false;
+        return;
     }
 
     // Coins.
@@ -90,7 +90,7 @@ function local_ultimate_coursemodule_edit_post_actions($moduleinfo, $course) {
     $contextcourse = \core\context\course::instance($course->id);
     $blockutil = new \local_ultimate\util\block();
     if (!$blockutil->context_has_block($contextcourse->id)) {
-        return false;
+        return $moduleinfo;
     }
 
     $ultimateskills = $moduleinfo->ultimateskills ?? [];

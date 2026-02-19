@@ -1,0 +1,104 @@
+<div class="row">
+    <div class="col-md-9">
+        <div class="card card-body mb-4">
+            <div class="d-flex">
+                <div class="userpicture" data-action="choose-avatar-modal">
+                    <img class="img-responsive" src="{{{useravatar}}}" alt="{{{userfirstname}}}">
+                </div>
+
+                <div class="userdata ml-2 flex-grow-1">
+                    <h2 class="mb-0">{{#str}}welcome, local_ultimate, {{firstname}}{{/str}}</h2>
+
+                    {{#showxp}}
+                        <p>Você está a apenas {{pointstonextlevel}} XP do Nível {{nextlevel}}. Continue assim!</p>
+
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-0">XP atual: {{points}}</p>
+                            <p class="mb-0">Próximo nível: {{nextlevelpoints}}</p>
+                        </div>
+
+                        <div class="progress" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-success" style="width: {{progress}}%"></div>
+                        </div>
+
+                        <div class="incentives d-flex mt-3">
+                            <div class="days">
+                                <i class="fa fa-fire"></i> 7 dias de ofensiva
+                            </div>
+
+                            <div class="ranking ml-2">
+                                <i class="fa fa-trophy"></i> Rank #12 global
+                            </div>
+                        </div>
+                    {{/showxp}}
+                </div>
+            </div>
+        </div>
+
+        {{#hasbadges}}
+            <div class="card card-body mb-2">
+                <h4>{{#str}}badges{{/str}}</h4>
+
+                <div class="row row-cols-3">
+                    {{#badges}}
+                        <div class="p-1">
+                            <div class="border border-radius p-2">
+                                <div class="d-flex align-items-center ">
+                                    <img src="{{{badgeimage}}}" alt="{{{name}}}" class="gamebadge">
+                                    <div class="info ml-2 w-100">
+                                        <h5>{{{name}}}</h5>
+                                        <p>{{{description}}}</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <p class="border-bottom mb-0">
+                                        <b>{{#str}}badgecriterias, local_ultimate{{/str}}</b>
+                                    </p>
+                                    {{#criteriasprogress}}
+                                        {{{.}}}
+                                    {{/criteriasprogress}}
+                                </div>
+                            </div>
+                        </div>
+                    {{/badges}}
+                </div>
+            </div>
+        {{/hasbadges}}
+
+        {{#hasskills}}
+            <div class="card card-body border">
+                <h4>{{#str}}myskills, local_ultimate{{/str}}</h4>
+
+                <div class="border p-3 my-2">
+                    {{#skills}}
+                        <p class="mb-0">{{skill}}: <small>{{userpoints}} / {{points}}</small></p>
+                        <div class="progress mb-2" style="width: initial;">
+                            <div class="progress-bar progress-bar-striped {{progressbg}}" role="progressbar" style="width: {{{percentpoints}}}%;" aria-valuenow="{{percentpoints}}" aria-valuemin="0" aria-valuemax="100">{{userpoints}} {{#str}}points, local_ultimate{{/str}}</div>
+                        </div>
+                    {{/skills}}
+                </div>
+            </div>
+        {{/hasskills}}
+    </div>
+    <div class="col-md-3">
+        <div class="card card-body">
+            <h4>Cursos em andamento</h4>
+            <ul class="list-group">
+            {{#courses}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{fullname}}
+                        {{#hascourseprogress}}
+                            <span class="badge badge-primary badge-pill">{{courseprogress}}%</span>
+                        {{/hascourseprogress}}
+                    </li>
+            {{/courses}}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{{#js}}
+    require(['local_ultimate/chooseavatar'], function(ChooseAvatar) {
+        ChooseAvatar.init('[data-action=choose-avatar-modal]', {{{contextid}}});
+    });
+{{/js}}

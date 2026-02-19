@@ -101,3 +101,5 @@ $string['config_level_up12'] = 'Score for level 12';
 $string['config_level_up13'] = 'Score for level 13';
 $string['config_level_up14'] = 'Score for level 14';
 $string['config_level_up15'] = 'Score for level 15';
+
+$string['welcome'] = 'Hi, {$a}! 👋';

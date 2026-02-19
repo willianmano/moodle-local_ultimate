@@ -21,14 +21,4 @@ class renderer extends plugin_renderer_base {
 
         return parent::render_from_template('local_ultimate/scoreboard', $data);
     }
-
-    public function render_profile(renderable $page) {
-        $data = $page->export_for_template($this);
-
-        if ($this->page->course->id == 1) {
-            return parent::render_from_template('local_ultimate/profile/site', $data);
-        }
-
-        return parent::render_from_template('local_ultimate/profile/course', $data);
-    }
 }

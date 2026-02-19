@@ -72,7 +72,8 @@ class course {
                 'startdate' => $course->startdate,
                 'completed' => $completed,
                 'completionenabled' => $completionenabled,
-                'progress' => $progress,
+                'courseprogress' => $progress,
+                'hascourseprogress' => !empty($progress),
                 'link' => new \moodle_url('/course/view.php', ['id' => $course->id]),
                 'image' => $this->get_summary_image($courseobj)
             ];

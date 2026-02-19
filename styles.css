@@ -28,7 +28,6 @@
     border: 2px solid #fff;
     font-size: 0.85em;
 }
-}
 
 .gameblock .profile {
     border-radius: 1rem;
@@ -279,4 +278,22 @@
 
 .gameblock .leaderboard .tab-content li:nth-child(3) .pos .number {
     background-color: #b4530a;
+}
+
+body#page-local-ultimate-profile .userpicture {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 4px solid var(--bs-success);
+    overflow: hidden;
+    background-color: #fff;
+}
+
+body#page-local-ultimate-profile .incentives div {
+    background-color: var(--bs-primary);
+    border-color: #f1f5f9;
+    color: #fff;
+    padding: .25rem .75rem;
+    border-radius: .5rem;
 }

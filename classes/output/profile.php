@@ -4,7 +4,10 @@ namespace local_ultimate\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use local_ultimate\util\coin;
 use local_ultimate\util\course;
+use local_ultimate\util\level;
+use local_ultimate\util\point;
 use local_ultimate\util\skill;
 use local_ultimate\util\badge;
 use renderable;
@@ -34,6 +37,8 @@ class profile implements renderable, templatable {
         global $USER;
 
         $userutil = new user();
+        $coinutil = new coin();
+        $pointutil = new point();
 
         $data = [
             'id' => $this->user->id,
@@ -43,16 +48,44 @@ class profile implements renderable, templatable {
             'useravatar' => $userutil->get_user_avatar_or_image($this->user),
             'itsme' => $USER->id == $this->user->id,
             'contextid' => $this->context->id,
+            'coins' => $coinutil->get_user_coins($USER->id),
+            'points' => $pointutil->get_user_points($USER->id),
         ];
 
-        if ($this->course->id == 1) {
-            $courseutil = new course();
 
-            $data['courses'] = $courseutil->get_user_courses_with_progress();
-            $data['hascourses'] = $data['courses'] != false;
+            $pointsdata = $pointutil->get_data($USER->id);
 
-            return $data;
-        }
+            $level = 1;
+            $points = 0;
+            if ($pointsdata) {
+                $level = $pointsdata->level;
+                $points = $pointsdata->points;
+            }
+
+            $levelutil = new level();
+            $nextlevelpoints = $levelutil->get_next_level_points($level);
+
+            $progress = (int)(($points / $nextlevelpoints) * 100);
+
+            $data += [
+                'showxp' => true,
+                'level' => $level,
+                'nextlevel' => $level + 1,
+                'points' => $points,
+                'nextlevelpoints' => $nextlevelpoints,
+                'pointstonextlevel' => $nextlevelpoints - $points,
+                'progress' => $progress,
+            ];
+
+
+
+        $courseutil = new course();
+
+        $data['courses'] = $courseutil->get_user_courses_with_progress();
+        $data['hascourses'] = $data['courses'] != false;
+
+
+
 
         $badgeutil = new badge();
         $data['badges'] = $badgeutil->get_user_course_badges_with_criterias($this->user->id, $this->course->id, $this->context->id, 1);
