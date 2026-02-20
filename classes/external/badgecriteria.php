@@ -61,7 +61,9 @@ class badgecriteria extends external_api {
         $data = [];
         parse_str($serialiseddata, $data);
 
-        $mform = new badgecriteriaform($data, $data);
+        $criteriaformclass = '\ultimatebadgecriteria_'.$data['method'].'\criteriaform';
+
+        $mform = new $criteriaformclass($data, $data);
 
         $validateddata = $mform->get_data();
 
@@ -75,20 +77,13 @@ class badgecriteria extends external_api {
         $badgecriteria->courseid = $courseid;
         $badgecriteria->badgeid = $validateddata->badgeid;
         $badgecriteria->method = $validateddata->method;
+        $badgecriteria->target = $validateddata->target ?? null;
         $badgecriteria->value = $validateddata->value;
         $badgecriteria->timecreated = $now;
         $badgecriteria->timemodified = $now;
 
-        if ($validateddata->skilltarget && $validateddata->method == 'skillpoints') {
-            $badgecriteria->target = $validateddata->skilltarget;
-        }
-
-        if (!empty($validateddata->skilltargetaggregation) && $validateddata->method == 'skillpointsaggregation') {
-            $badgecriteria->target = implode(',', $validateddata->skilltargetaggregation);
-        }
-
-        if ($validateddata->method == 'coursecompletion') {
-            $badgecriteria->value = $courseid;
+        if (!empty($badgecriteria->target) && is_array($badgecriteria->target)) {
+            $badgecriteria->target = implode(',', $badgecriteria->target);
         }
 
         $badgecriteriaid = $DB->insert_record('ultimate_badges_criterias', $badgecriteria);

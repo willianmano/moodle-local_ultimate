@@ -1,8 +1,14 @@
 <div class="text-right mb-3">
-    <a href="#"
-       class="btn btn-primary" data-action="create-badge-modal">
-        <i class="fa fa-plus-circle"></i> {{#str}}createbadgecriteria, local_ultimate{{/str}}
-    </a>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-plus-circle"></i> {{#str}}createbadgecriteria, local_ultimate{{/str}}
+        </button>
+        <ul class="dropdown-menu">
+            {{#criteriamethods}}
+                <li><a class="dropdown-item" data-action="open-criteria-modal" data-criteria="{{name}}" href="#">{{displayname}}</a></li>
+            {{/criteriamethods}}
+        </ul>
+    </div>
 </div>
 
 <table class="table table-bordered table-hover table-ultimate-badgecriterias">
@@ -32,7 +38,7 @@
 
 {{#js}}
     require(['local_ultimate/badgecriteria/create', 'local_ultimate/badgecriteria/delete'], function(CreateBadgeCriteria, DeleteBadgeCriteria) {
-        CreateBadgeCriteria.init('[data-action=create-badge-modal]', {{{contextid}}}, {{{courseid}}}, {{{badgeid}}});
+        CreateBadgeCriteria.init({{{courseid}}}, {{{badgeid}}}, {{{contextid}}});
 
         DeleteBadgeCriteria.init();
     });

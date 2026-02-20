@@ -222,15 +222,14 @@ function local_ultimate_output_fragment_badgecriteria_form($args) {
     $args = (object) $args;
     $o = '';
 
-    $formdata = [];
-    if (!empty($args->jsonformdata)) {
-        $serialiseddata = json_decode($args->jsonformdata);
-        $formdata = (array)$serialiseddata;
-    }
+    $serialiseddata = json_decode($args->jsonformdata);
+    $formdata = (array)$serialiseddata;
 
-    $mform = new \local_ultimate\forms\badgecriteria($formdata, [
+    $criteriaformclass = '\ultimatebadgecriteria_'.$serialiseddata->criteria.'\criteriaform';
+    $mform = new $criteriaformclass($formdata, [
         'courseid' => $serialiseddata->courseid,
         'badgeid' => $serialiseddata->badgeid,
+        'method' => $serialiseddata->criteria,
     ]);
 
     if (!empty($args->jsonformdata)) {

@@ -29,11 +29,23 @@ class badgecriterias implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $badgecriteriautil = new \local_ultimate\util\badgecriteria();
 
+        $criteriamethods = [];
+        $installedcriterias = \core_plugin_manager::instance()->get_plugins_of_type('ultimatebadgecriteria');
+        if ($installedcriterias) {
+            foreach ($installedcriterias as $criteria) {
+                $criteriamethods[] = [
+                    'name' => $criteria->name,
+                    'displayname' => $criteria->displayname,
+                ];
+            }
+        }
+
         return [
             'contextid' => $this->context->id,
             'courseid' => $this->course->id,
             'badgeid' => $this->gamebadge->id,
-            'criterias' => $badgecriteriautil->get_game_badge_criterias_with_skill_name($this->gamebadge)
+            'criterias' => $badgecriteriautil->get_game_badge_criterias_with_skill_name($this->gamebadge),
+            'criteriamethods' => $criteriamethods,
         ];
     }
 }

@@ -1,188 +1,122 @@
-/**
- * Create badge criteria js logic.
- *
- * @copyright   2022 Willian Mano {@link https://conecti.me}
- * @author      Willian Mano <willianmanoaraujo@gmail.com>
- */
+import ModalEvents from 'core/modal_events';
+import ModalSaveCancel from 'core/modal_save_cancel';
+import Fragment from 'core/fragment';
+import {getString} from 'core/str';
+import Ajax from 'core/ajax';
+import $ from 'jquery';
+import * as Notification from 'core/notification';
 
-define([
-        'jquery',
-        'core/config',
-        'core/str',
-        'core/modal_factory',
-        'core/modal_events',
-        'core/fragment',
-        'core/ajax',
-        'local_ultimate/sweetalert',
-        'core/yui'],
-    function($, Config, Str, ModalFactory, ModalEvents, Fragment, Ajax, Swal, Y) {
+const SELECTORS = {
+    TRIGGER: '[data-action="open-criteria-modal"]',
+};
 
-        var CreateBadgeCriteria = function(selector, contextid, courseid, badgeid) {
-            this.contextid = contextid;
+let courseid = 0;
+let badgeid = 0;
+let contextid = 0;
+let modal = null;
 
-            this.courseid = courseid;
+export const init = (course, badge, context) => {
+    courseid = course;
+    badgeid = badge;
+    contextid = context;
 
-            this.badgeid = badgeid;
+    registerListenerEvents();
+};
 
-            this.init(selector);
-        };
+const registerListenerEvents = () => {
+    document.addEventListener('click', (e) => {
+        const preview = e.target.closest(SELECTORS.TRIGGER);
+        if (preview) {
+            buildModal(preview).catch(Notification.exception);
+        }
+    });
+};
 
-        CreateBadgeCriteria.prototype.modal = null;
+const buildModal = async(element) => {
+    // This string can be long. We will fetch it with JS as opposed to passing it as an attribute.
+    let title = await getString('createbadgecriteria', 'local_ultimate');
 
-        CreateBadgeCriteria.prototype.contextid = -1;
+    // Prepare data for modal.
+    const data = {
+        criteria: element.getAttribute('data-criteria'),
+        courseid: courseid,
+        badgeid: badgeid,
+    };
 
-        CreateBadgeCriteria.prototype.courseid = -1;
+    // Determine which modal template we should use.
+    let modalTemplate = ModalSaveCancel;
 
-        CreateBadgeCriteria.prototype.badgeid = -1;
+    modal = await modalTemplate.create({
+        title: title,
+        body: getBody(data),
+        show: true,
+    });
 
-        CreateBadgeCriteria.prototype.getBody = function(formdata) {
-            if (typeof formdata === "undefined") {
-                formdata = {};
-            }
+    // We catch the modal save event, and use it to submit the form inside the modal.
+    // Triggering a form submission will give JS validation scripts a chance to check for errors.
+    modal.getRoot().on(ModalEvents.save, (e) => submitFormAjax(e));
+    // We also catch the form submit event and use it to submit the form with ajax.
+    modal.getRoot().on('submit', 'form', (e) => submitFormAjax(e));
+};
 
-            // Get the content of the modal.
-            var params = {jsonformdata: JSON.stringify(formdata)};
+const submitFormAjax = async(e) => {
+    e.preventDefault();
 
-            return Fragment.loadFragment('local_ultimate', 'badgecriteria_form', this.contextid, params);
-        };
+    var formData = modal.getRoot().find('form').serialize();
 
-        CreateBadgeCriteria.prototype.init = function(selector) {
-            var triggers = $(selector);
+    Ajax.call([{
+        methodname: 'local_ultimate_createbadgecriteria',
+        args: {contextid: contextid, courseid: courseid, jsonformdata: JSON.stringify(formData)},
+        done: handleFormSubmissionResponse.bind(this),
+        fail: handleFormSubmissionFailure.bind(this, formData)
+    }]);
+};
 
-            return Str.get_string('createbadgecriteria', 'local_ultimate').then(function(title) {
-                // Create the modal.
-                return ModalFactory.create({
-                    type: ModalFactory.types.SAVE_CANCEL,
-                    title: title,
-                    body: this.getBody({courseid: this.courseid, badgeid: this.badgeid})
-                }, triggers);
-            }.bind(this)).then(function(modal) {
-                // Keep a reference to the modal.
-                this.modal = modal;
+const handleFormSubmissionFailure = data => {
+    // Oh noes! Epic fail :(
+    // Ah wait - this is normal. We need to re-display the form with errors!
+    modal.setBody(getBody(data));
+};
 
-                // We want to reset the form every time it is opened.
-                this.modal.getRoot().on(ModalEvents.hidden, function() {
-                    this.modal.setBody(this.getBody({courseid: this.courseid, badgeid: this.badgeid}));
-                }.bind(this));
+const handleFormSubmissionResponse = (data) => {
+    modal.destroy();
 
-                // We want to hide the submit buttons every time it is opened.
-                this.modal.getRoot().on(ModalEvents.shown, function() {
-                    this.modal.getRoot().append('<style>[data-fieldtype=submit] { display: none ! important; }</style>');
-                }.bind(this));
+    var item = JSON.parse(data.data);
 
-                // We catch the modal save event, and use it to submit the form inside the modal.
-                // Triggering a form submission will give JS validation scripts a chance to check for errors.
-                this.modal.getRoot().on(ModalEvents.save, this.submitForm.bind(this));
-                // We also catch the form submit event and use it to submit the form with ajax.
-                this.modal.getRoot().on('submit', 'form', this.submitFormAjax.bind(this));
-
-                return this.modal;
-            }.bind(this));
-        };
-
-        CreateBadgeCriteria.prototype.handleFormSubmissionResponse = function(data) {
-            this.modal.hide();
-            // We could trigger an event instead.
-            Y.use('moodle-core-formchangechecker', function() {
-                M.core_formchangechecker.reset_form_dirty_state();
-            });
-
-            var item = JSON.parse(data.data);
-
-            var target = item.target;
-            if (typeof item.target === 'undefined') {
-                target = '';
-            }
-
-            var tableLine = $('<tr>' +
-                '<th scope="row">'+item.id+'</th>' +
-                '<td>'+item.method+'</td>' +
-                '<td>'+target+'</td>' +
-                '<td>'+item.value+'</td>' +
-                '<td style="width: 120px; text-align: center;">' +
-                '<a href="#" data-id="'+item.id+'" class="btn btn-danger btn-sm delete-ultimate-badgecriteria">' +
-                '<i class="fa fa-trash-o"></i>' +
-                '</a> ' +
-                '</td>' +
-                '</tr>');
-
-            tableLine
-                .appendTo('.table-ultimate-badgecriterias tbody')
-                .hide().fadeIn('normal');
-
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 8000,
-                timerProgressBar: true,
-                onOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer);
-                    toast.addEventListener('mouseleave', Swal.resumeTimer);
-                }
-            });
-
-            Toast.fire({
-                icon: 'success',
-                title: data.message
-            });
-        };
-
-        CreateBadgeCriteria.prototype.handleFormSubmissionFailure = function(data) {
-            // Oh noes! Epic fail :(
-            // Ah wait - this is normal. We need to re-display the form with errors!
-            this.modal.setBody(this.getBody(data));
-        };
-
-        CreateBadgeCriteria.prototype.submitFormAjax = function(e) {
-            // We don't want to do a real form submission.
-            e.preventDefault();
-
-            var changeEvent = document.createEvent('HTMLEvents');
-            changeEvent.initEvent('change', true, true);
-
-            // Prompt all inputs to run their validation functions.
-            // Normally this would happen when the form is submitted, but
-            // since we aren't submitting the form normally we need to run client side
-            // validation.
-            this.modal.getRoot().find(':input').each(function(index, element) {
-                element.dispatchEvent(changeEvent);
-            });
-
-            // Now the change events have run, see if there are any "invalid" form fields.
-            var invalid = $.merge(
-                this.modal.getRoot().find('[aria-invalid="true"]'),
-                this.modal.getRoot().find('.error')
-            );
-
-            // If we found invalid fields, focus on the first one and do not submit via ajax.
-            if (invalid.length) {
-                invalid.first().focus();
-                return;
-            }
-
-            // Convert all the form elements values to a serialised string.
-            var formData = this.modal.getRoot().find('form').serialize();
-
-            // Now we can continue...
-            Ajax.call([{
-                methodname: 'local_ultimate_createbadgecriteria',
-                args: {contextid: this.contextid, courseid: this.courseid, jsonformdata: JSON.stringify(formData)},
-                done: this.handleFormSubmissionResponse.bind(this),
-                fail: this.handleFormSubmissionFailure.bind(this, formData)
-            }]);
-        };
-
-        CreateBadgeCriteria.prototype.submitForm = function(e) {
-            e.preventDefault();
-
-            this.modal.getRoot().find('form').submit();
-        };
-
-        return {
-            init: function(selector, contextid, courseid, badgeid) {
-                return new CreateBadgeCriteria(selector, contextid, courseid, badgeid);
-            }
-        };
+    var target = item.target;
+    if (typeof item.target === 'undefined') {
+        target = '';
     }
-);
+
+    var tableLine = $('<tr>' +
+        '<th scope="row">' + item.id + '</th>' +
+        '<td>' + item.method + '</td>' +
+        '<td>' + target + '</td>' +
+        '<td>' + item.value + '</td>' +
+        '<td style="width: 120px; text-align: center;">' +
+        '<a href="#" data-id="' + item.id + '" class="btn btn-danger btn-sm delete-ultimate-badgecriteria">' +
+        '<i class="fa fa-trash-o"></i>' +
+        '</a> ' +
+        '</td>' +
+        '</tr>');
+
+    tableLine
+        .appendTo('.table-ultimate-badgecriterias tbody')
+        .hide().fadeIn('normal');
+
+    Notification.addNotification({
+        message: data.message,
+        type: "success"
+    });
+};
+
+const getBody = async(formdata) => {
+    if (typeof formdata === "undefined") {
+        formdata = {};
+    }
+
+    // Get the content of the modal.
+    const params = {jsonformdata: JSON.stringify(formdata)};
+
+    return Fragment.loadFragment('local_ultimate', 'badgecriteria_form', contextid, params);
+};

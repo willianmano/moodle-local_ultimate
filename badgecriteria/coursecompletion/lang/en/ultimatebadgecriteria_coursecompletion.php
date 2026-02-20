@@ -11,3 +11,4 @@
 $string['pluginname'] = 'Course completion';
 $string['privacy:metadata'] = 'The Course completion plugin does not store any personal data.';
 $string['criteriaprogresdesc'] = 'To complete this criteria you need to complete the course.';
+$string['value_help'] = 'Just click on save to add this course as criteria to receive the badge.';

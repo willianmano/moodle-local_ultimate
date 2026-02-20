@@ -4,8 +4,8 @@
  * @copyright   2022 Willian Mano {@link https://conecti.me}
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */
-
-define(['jquery', 'core/ajax', 'core/str', 'local_ultimate/sweetalert'], function($, Ajax, Str, Swal) {
+define(['jquery', 'core/ajax', 'core/str', 'local_ultimate/sweetalert', 'core/notification'],
+    function($, Ajax, Str, Swal, Notification) {
     var STRINGS = {
         CONFIRM_TITLE: 'Are you sure?',
         CONFIRM_MSG: 'Once deleted, the item cannot be recovered!',
@@ -107,25 +107,9 @@ define(['jquery', 'core/ajax', 'core/str', 'local_ultimate/sweetalert'], functio
             $(this).remove();
         });
 
-        this.showToast('success', STRINGS.SUCCESS);
-    };
-
-    DeleteBadgeCriteria.prototype.showToast = function(type, message) {
-        var Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 8000,
-            timerProgressBar: true,
-            onOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-            }
-        });
-
-        Toast.fire({
-            icon: type,
-            title: message
+        Notification.addNotification({
+            message: STRINGS.SUCCESS,
+            type: 'success'
         });
     };
 
