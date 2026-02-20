@@ -103,3 +103,8 @@ $string['config_level_up14'] = 'Score for level 14';
 $string['config_level_up15'] = 'Score for level 15';
 
 $string['welcome'] = 'Hi, {$a}! 👋';
+$string['xpprogress1'] = 'You are only {$a} XP away from Level';
+$string['xpprogress2'] = ' {$a}. Keep it up!';
+$string['currentxp'] = 'Current XP: {$a}';
+$string['nextlvl'] = 'Next level: {$a}';
+$string['coursesinprogress'] = 'Courses in progress';

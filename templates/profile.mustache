@@ -10,11 +10,11 @@
                     <h2 class="mb-0">{{#str}}welcome, local_ultimate, {{firstname}}{{/str}}</h2>
 
                     {{#showxp}}
-                        <p>Você está a apenas {{pointstonextlevel}} XP do Nível {{nextlevel}}. Continue assim!</p>
+                        <p>{{#str}}xpprogress1, local_ultimate, {{pointstonextlevel}}{{/str}} {{#str}}xpprogress2, local_ultimate, {{nextlevel}}{{/str}}</p>
 
                         <div class="d-flex justify-content-between">
-                            <p class="mb-0">XP atual: {{points}}</p>
-                            <p class="mb-0">Próximo nível: {{nextlevelpoints}}</p>
+                            <p class="mb-0">{{#str}}currentxp, local_ultimate, {{points}}{{/str}}</p>
+                            <p class="mb-0">{{#str}}nextlvl, local_ultimate, {{nextlevelpoints}}{{/str}}</p>
                         </div>
 
                         <div class="progress" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
@@ -23,7 +23,7 @@
 
                         <div class="incentives d-flex mt-3">
                             <div class="days">
-                                <i class="fa fa-fire"></i> 7 dias de ofensiva
+                                <i class="fa fa-fire"></i> 7 of offensive
                             </div>
 
                             <div class="ranking ml-2">
@@ -82,7 +82,7 @@
     </div>
     <div class="col-md-3">
         <div class="card card-body">
-            <h4>Cursos em andamento</h4>
+            <h4>{{#str}}coursesinprogress, local_ultimate{{/str}}</h4>
             <ul class="list-group">
             {{#courses}}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
