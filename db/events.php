@@ -31,4 +31,9 @@ $observers = [
         'callback' => '\local_ultimate\observers\badgeissuer::observer',
         'internal' => false
     ],
+    [
+        'eventname' => '\core\event\course_completed',
+        'callback' => '\local_ultimate\observers\badgeissuer::observer',
+        'internal' => false
+    ],
 ];

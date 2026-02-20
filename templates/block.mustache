@@ -98,10 +98,8 @@
     {{/showleaderboard}}
 </div>
 
-{{#showavatar}}
-    {{#js}}
-        require(['local_ultimate/chooseavatar'], function(ChooseAvatar) {
-            ChooseAvatar.init('[data-action=choose-avatar-modal]', {{{contextid}}});
-        });
-    {{/js}}
-{{/showavatar}}
+{{#js}}
+    require(['local_ultimate/chooseavatar'], function(ChooseAvatar) {
+        ChooseAvatar.init('[data-action=choose-avatar-modal]', {{{contextid}}});
+    });
+{{/js}}

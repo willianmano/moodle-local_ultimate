@@ -2,6 +2,7 @@
 
 namespace local_ultimate\forms;
 
+use local_ultimate\util\course;
 use local_ultimate\util\skill;
 use local_ultimate\util\badgecriteria as badgecriteriautil;
 

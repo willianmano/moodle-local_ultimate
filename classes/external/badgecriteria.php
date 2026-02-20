@@ -87,6 +87,10 @@ class badgecriteria extends external_api {
             $badgecriteria->target = implode(',', $validateddata->skilltargetaggregation);
         }
 
+        if ($validateddata->method == 'coursecompletion') {
+            $badgecriteria->value = $courseid;
+        }
+
         $badgecriteriaid = $DB->insert_record('ultimate_badges_criterias', $badgecriteria);
 
         $badgecriteria->id = $badgecriteriaid;
