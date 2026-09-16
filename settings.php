@@ -53,5 +53,14 @@ if ($hassiteconfig) {
         ));
     }
 
+    $settings->add(new admin_setting_configstoredfile(
+        'local_ultimate/avatars',
+        new lang_string('avatars', 'local_ultimate'),
+        new lang_string('avatarsdesc', 'local_ultimate'),
+        'avatars',
+        0,
+        ['subdirs' => 0, 'maxfiles' => 28, 'accepted_types' => ['.png', '.jpg', '.jpeg', '.gif', '.svg']]
+    ));
+
     $ADMIN->add('localplugins', $settings);
 }

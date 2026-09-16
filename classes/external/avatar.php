@@ -24,7 +24,7 @@ class avatar extends external_api {
     public static function choose_parameters() {
         return new external_function_parameters([
             'contextid' => new external_value(PARAM_INT, 'The context id for the course module'),
-            'avatarid' => new external_value(PARAM_INT, 'The avatar id'),
+            'avatarid' => new external_value(PARAM_TEXT, 'The avatar id'),
         ]);
     }
 
@@ -32,7 +32,7 @@ class avatar extends external_api {
      * Choose avatar method
      *
      * @param int $contextid
-     * @param int $avatarid
+     * @param string $avatarid
      *
      * @return array
      *
@@ -42,8 +42,6 @@ class avatar extends external_api {
      * @throws \moodle_exception
      */
     public static function choose($contextid, $avatarid) {
-        global $CFG;
-
         // We always must pass webservice params through validate_parameters.
         $params = self::validate_parameters(self::choose_parameters(),
             ['contextid' => $contextid, 'avatarid' => $avatarid]);
@@ -53,14 +51,26 @@ class avatar extends external_api {
         // We always must call validate_context in a webservice.
         self::validate_context($context);
 
-        set_user_preference('ultimate_avatarid', $avatarid);
+        $avatarutil = new \local_ultimate\util\avatar();
 
-        $avatarurl = $CFG->wwwroot . '/local/ultimate/pix/avatar/animals/' . $avatarid . '.png';
+        $chosen = null;
+        foreach ($avatarutil->get_avatars() as $avatar) {
+            if ($avatar['id'] === $params['avatarid']) {
+                $chosen = $avatar;
+                break;
+            }
+        }
+
+        if (!$chosen) {
+            throw new \moodle_exception('invalidavatar', 'local_ultimate');
+        }
+
+        set_user_preference('ultimate_avatarid', $chosen['id']);
 
         return [
             'status' => 'ok',
             'message' => get_string('chooseavatar_success', 'local_ultimate'),
-            'data' => json_encode($avatarurl)
+            'data' => json_encode($chosen['url'])
         ];
     }
 

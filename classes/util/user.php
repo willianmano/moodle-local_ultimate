@@ -27,7 +27,12 @@ class user {
         $useravatar = get_user_preferences('ultimate_avatarid', null, $user);
 
         if ($useravatar) {
-            return $CFG->wwwroot . '/local/ultimate/pix/avatar/animals/' . $useravatar . '.png';
+            $avatarutil = new avatar();
+            $avatarurl = $avatarutil->get_avatar_url($useravatar);
+
+            if ($avatarurl) {
+                return $avatarurl;
+            }
         }
 
         $userpicture = new \user_picture($user);

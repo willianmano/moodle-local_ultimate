@@ -108,3 +108,7 @@ $string['xpprogress2'] = ' {$a}. Keep it up!';
 $string['currentxp'] = 'Current XP: {$a}';
 $string['nextlvl'] = 'Next level: {$a}';
 $string['coursesinprogress'] = 'Courses in progress';
+
+$string['avatars'] = 'Avatars';
+$string['avatarsdesc'] = 'Upload custom images for users to choose as their avatar. If no image is uploaded here, users will be able to choose from the default avatars.';
+$string['invalidavatar'] = 'Invalid avatar';

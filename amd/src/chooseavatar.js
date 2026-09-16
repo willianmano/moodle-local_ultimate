@@ -9,12 +9,12 @@ define([
         'jquery',
         'core/config',
         'core/str',
-        'core/modal_factory',
+        'core/modal',
         'core/modal_events',
         'core/fragment',
         'core/ajax',
         'local_ultimate/sweetalert'],
-    function($, Config, Str, ModalFactory, ModalEvents, Fragment, Ajax, Swal) {
+    function($, Config, Str, Modal, ModalEvents, Fragment, Ajax, Swal) {
 
         var ChooseAvatar = function(selector, contextid) {
             this.contextid = contextid;
@@ -30,13 +30,12 @@ define([
             var triggers = $(selector);
 
             return Str.get_string('chooseavatar', 'local_ultimate').then(function(title) {
-                // Create the modal.
-                return ModalFactory.create({
-                    type: ModalFactory.types.DEFAULT,
+                // Create the modal using the current default modal type.
+                return Modal.create({
                     title: title,
                     body: this.getBody(),
                     large: true
-                }, triggers);
+                });
             }.bind(this)).then(function(modal) {
                 // Keep a reference to the modal.
                 this.modal = modal;
@@ -53,6 +52,14 @@ define([
 
                 // We also catch the form submit event and use it to submit the form with ajax.
                 this.modal.getRoot().on('click', '.chooseavatar-form img.avatar', this.avatarSelected.bind(this));
+
+                // ModalFactory used to show the modal automatically when a trigger was clicked,
+                // core/modal requires us to wire that up ourselves.
+                triggers.on('click', function(e) {
+                    e.preventDefault();
+
+                    this.modal.show();
+                }.bind(this));
 
                 return this.modal;
             }.bind(this));

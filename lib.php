@@ -140,18 +140,51 @@ function local_ultimate_extend_navigation_course($navigation, $course, $context)
  * @return string
  */
 function local_ultimate_output_fragment_chooseavatar_form($args) {
-    global $CFG;
+    $avatarutil = new \local_ultimate\util\avatar();
 
     $o = html_writer::start_div('chooseavatar-form');
 
-    for ($i = 1; $i < 18; $i++) {
-        $url = $CFG->wwwroot . '/local/ultimate/pix/avatar/animals/' . $i . '.png';
-        $o .= html_writer::img($url, 'avatar', ['class' => 'avatar', 'data-id' => $i]);
+    foreach ($avatarutil->get_avatars() as $avatar) {
+        $o .= html_writer::img($avatar['url'], 'avatar', ['class' => 'avatar', 'data-id' => $avatar['id']]);
     }
 
     $o .= html_writer::end_div();
 
     return $o;
+}
+
+/**
+ * Serves the custom avatars uploaded by the admin through the local_ultimate/avatars setting.
+ *
+ * @param stdClass $course
+ * @param stdClass|null $cm
+ * @param context $context
+ * @param string $filearea
+ * @param array $args
+ * @param bool $forcedownload
+ * @param array $options
+ * @return void
+ */
+function local_ultimate_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
+    if ($context->contextlevel != CONTEXT_SYSTEM || $filearea !== 'avatars') {
+        send_file_not_found();
+    }
+
+    $itemid = (int) array_shift($args);
+    $filename = array_pop($args);
+
+    $fs = get_file_storage();
+    $file = $fs->get_file($context->id, 'local_ultimate', 'avatars', $itemid, '/', $filename);
+
+    if (!$file) {
+        send_file_not_found();
+    }
+
+    if (!array_key_exists('cacheability', $options)) {
+        $options['cacheability'] = 'public';
+    }
+
+    send_stored_file($file, null, 0, $forcedownload, $options);
 }
 
 /**
