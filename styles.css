@@ -280,7 +280,7 @@
     background-color: #b4530a;
 }
 
-body#page-local-ultimate-profile .userpicture {
+body#page-local-ultimate-profile .avatar .userpicture {
     width: 100px;
     height: 100px;
     cursor: pointer;
