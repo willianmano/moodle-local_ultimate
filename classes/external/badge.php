@@ -52,7 +52,7 @@ class badge extends external_api {
         $params = self::validate_parameters(self::create_parameters(),
             ['contextid' => $contextid, 'courseid' => $courseid, 'jsonformdata' => $jsonformdata]);
 
-        $context = context::instance_by_id($params['contextid'], MUST_EXIST);
+        $context = context::instance_by_id($params['contextid']);
 
         // We always must call validate_context in a webservice.
         self::validate_context($context);
